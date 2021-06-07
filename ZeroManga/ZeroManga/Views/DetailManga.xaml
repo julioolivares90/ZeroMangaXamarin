@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ZeroManga.Views.DetailManga"
+             Shell.NavBarIsVisible="False"
+             xmlns:local="clr-namespace:ZeroManga.Styles"
+              xmlns:anim="clr-namespace:Xamanimation;assembly=Xamanimation"
+             BackgroundColor="{DynamicResource Primary}"
+            >
+    <ContentPage.Resources>
+        <!-- ANIMATIONS -->
+        <anim:FadeToAnimation x:Key="FakeNavBarFadeOut" Target="{x:Reference FakeNavBar}" Opacity="0" Duration="500"/>
+        <anim:FadeToAnimation x:Key="FakeNavBarFadeIn" Target="{x:Reference FakeNavBar}" Opacity="1" Duration="500" />
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="88"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.RowSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="360"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <BoxView 
+                BackgroundColor="Red" HorizontalOptions="Fill"
+                TranslationY="{Binding RelativeScrollY, 
+                                Source={x:Reference Scroll}, 
+                                Converter={StaticResource ScrollValueConverter}, 
+                                ConverterParameter='-5;0;200;false;0'}"
+                />
+                <ScrollView>
+                    <ScrollView.Behaviors>
+                        <anim:ScrollViewScrollBehavior x:Name="Scroll" />
+                    </ScrollView.Behaviors>
+                    <StackLayout>
+                        <Label Text="algo"/>
+                        <Label Text="algo"/>
+                        <Label Text="algo"/>
+                        <Label Text="algo"/>
+                        <Label Text="algo"/>
+                        <Label Text="algo"/>
+                        <Label Text="algo"/>
+                    </StackLayout>
+                </ScrollView>
+            </Grid>
+            
+            <FlexLayout
+                x:Name="FakeNavBar"
+                BackgroundColor="{StaticResource Primary}"
+                Direction="Row"
+                Opacity="0"
+                Padding="15,42,15,15"
+                >
+                <FlexLayout.Triggers>
+                    <DataTrigger TargetType="FlexLayout"
+                                Binding="{Binding ScrollY, 
+                                        Source={x:Reference Scroll}, 
+                                        Converter={StaticResource ComparisonConverter},
+                                        ConverterParameter='180;>'}"
+                                Value="true">
+                        <DataTrigger.EnterActions>
+                            <anim:BeginAnimation
+                                    Animation="{StaticResource FakeNavBarFadeIn}" />
+                        </DataTrigger.EnterActions>
+                        <DataTrigger.ExitActions>
+                            <anim:BeginAnimation
+                                    Animation="{StaticResource FakeNavBarFadeOut}" />
+                        </DataTrigger.ExitActions>
+                    </DataTrigger>
+                </FlexLayout.Triggers>
+                <ImageButton
+                FlexLayout.Shrink="0" Command="{Binding BackCommand}">
+                    <ImageButton.Source>
+                        <FontImageSource
+                        FontFamily="FontAwesome"
+                        Glyph="{x:Static local:IconFont.ChevronLeft}"
+                        Color="{StaticResource NeutralDark}" />
+                    </ImageButton.Source>
+                </ImageButton>
+                <Label
+                Text="{Binding title}" 
+                FontSize="18"
+                Margin="10,0"
+                VerticalOptions="Center"
+                TextColor="{StaticResource NeutralDark}"
+                LineBreakMode="TailTruncation"
+                FlexLayout.AlignSelf="Center"
+                FlexLayout.Grow="1" />
+            </FlexLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

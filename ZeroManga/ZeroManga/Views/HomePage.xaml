@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             x:Class="ZeroManga.Views.HomePage"
+             Title="{Binding Title}"
+             xmlns:local="clr-namespace:ZeroManga.ViewModels"  
+             xmlns:model="clr-namespace:ZeroManga.Models"
+             Visual="Material"
+             BackgroundColor="{DynamicResource Primary}"
+             Shell.NavBarHasShadow="true"
+             >
+    <ContentPage.Content>
+        <RefreshView x:DataType="local:HomePageViewModel" 
+                     Command="{Binding LoadMangas}" 
+                     IsRefreshing="{Binding IsBusy , Mode=TwoWay}" >
+            <ScrollView>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="300"/>
+                        <RowDefinition Height="300"/>
+                    </Grid.RowDefinitions>
+                    <CollectionView                         
+                                Grid.Row="0"                     
+                                x:Name="MangaPopularesListView"
+                                ItemsSource="{Binding MangasPopulares}"
+                                SelectionMode="None"
+                                HorizontalOptions="FillAndExpand"
+                                Margin="10"
+                               >
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Horizontal"  HorizontalItemSpacing="10"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate
+                           
+                            >
+                            <DataTemplate>
+                                <Frame                                     
+                                    CornerRadius="10"  
+                                    Margin="10" 
+                                    Padding="10"
+                                    WidthRequest="200" 
+                                    HeightRequest="300" 
+                                    Visual="Material"
+                                    BorderColor="Black"  
+                                    HasShadow="True" 
+                                    x:DataType="model:ItemManga" 
+                                    BackgroundColor="{DynamicResource Primary}">
+                                    <RelativeLayout
+                                        
+                                        >
+                                        <ffimageloading:CachedImage x:Name="imageBanner" Source="{Binding MangaImagen}" 
+                                                                    ErrorPlaceholder="rin_tohsaka" 
+                                                                    LoadingPlaceholder="rin_tohsaka" 
+                                                                    Aspect="AspectFit" 
+                                                                    WidthRequest="200" 
+                                                                    HeightRequest="300"
+                                                                    RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                                                                    RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}"      
+                                           />
+                                        <Label Text="{Binding Title}" 
+                                           VerticalOptions="CenterAndExpand"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="Center"
+                                           WidthRequest="300"
+                                           HorizontalOptions="FillAndExpand"
+                                           x:Name="txtTitle"
+                                           LineBreakMode="MiddleTruncation"
+                                           FontSize="16"
+                                           BackgroundColor="#80212121"
+                                           TextColor="White"
+                                           RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView,ElementName=imageBanner,Property=Height,Constant=-269,Factor=1}"
+                                           RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToView,ElementName=imageBanner,Property=Width,Factor=0.3,Constant=-75}"/>
+                                        <Label 
+                                       
+                                        WidthRequest="250"
+                                           Text="{Binding Demography}" 
+                                        VerticalTextAlignment="Center"
+                                        HorizontalTextAlignment="Center"
+                                           HorizontalOptions="FillAndExpand"
+                                           VerticalOptions="CenterAndExpand"
+                                           TextColor="White" BackgroundColor="{Binding Color}"
+                                            RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView,ElementName=txtTitle,Property=Height,Constant=230,Factor=1}"
+                                            RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToView,ElementName=txtTitle,Property=Width,Factor=0.1,Constant=-40}"
+                                           />
+                                        <Label Text="{Binding Type}" FontSize="12" TextColor="White" BackgroundColor="#00e676"
+                                            RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView,ElementName=imageBanner,Property=Height,Constant=-248,Factor=1}"
+                                            RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToView,ElementName=imageBanner,Property=Width,Factor=0.1,Constant=-30}"
+                                           />
+                                    </RelativeLayout>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                        NumberOfTapsRequired="1"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:HomePageViewModel}}, Path=ItemTapped}"
+                                        CommandParameter="{Binding .}"
+                                        >
+                                        </TapGestureRecognizer>
+                                    </Frame.GestureRecognizers>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <CollectionView                         
+                                Grid.Row="1"                     
+                                x:Name="MangasSeinenListView"
+                                ItemsSource="{Binding MangasSeinen}"
+                                SelectionMode="None"
+                                HorizontalOptions="FillAndExpand"
+                                Margin="10"
+                               >
+                        <CollectionView.ItemsLayout>
+                            <GridItemsLayout Orientation="Horizontal"  HorizontalItemSpacing="10"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate
+                           
+                            >
+                            <DataTemplate>
+                                <Frame                                     
+                                    CornerRadius="10"  
+                                    Margin="10" 
+                                    Padding="10"
+                                    WidthRequest="200" 
+                                    HeightRequest="300" 
+                                    Visual="Material"
+                                    BorderColor="Black"  
+                                    HasShadow="True" 
+                                    x:DataType="model:ItemManga" 
+                                    BackgroundColor="{DynamicResource Primary}">
+                                    <RelativeLayout
+                                        
+                                        >
+                                        <ffimageloading:CachedImage x:Name="imageBanner" Source="{Binding MangaImagen}" 
+                                                                    ErrorPlaceholder="rin_tohsaka" 
+                                                                    LoadingPlaceholder="rin_tohsaka" 
+                                                                    Aspect="AspectFit" 
+                                                                    WidthRequest="200" 
+                                                                    HeightRequest="300"
+                                                                    RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                                                                    RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}"      
+                                           />
+                                        <Label Text="{Binding Title}" 
+                                           VerticalOptions="CenterAndExpand"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="Center"
+                                           WidthRequest="300"
+                                           HorizontalOptions="FillAndExpand"
+                                           x:Name="txtTitle"
+                                           LineBreakMode="MiddleTruncation"
+                                           FontSize="16"
+                                           BackgroundColor="#80212121"
+                                           TextColor="White"
+                                           RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView,ElementName=imageBanner,Property=Height,Constant=-269,Factor=1}"
+                                           RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToView,ElementName=imageBanner,Property=Width,Factor=0.3,Constant=-75}"/>
+                                        <Label 
+                                       
+                                        WidthRequest="250"
+                                           Text="{Binding Demography}" 
+                                        VerticalTextAlignment="Center"
+                                        HorizontalTextAlignment="Center"
+                                           HorizontalOptions="FillAndExpand"
+                                           VerticalOptions="CenterAndExpand"
+                                           TextColor="White" BackgroundColor="{Binding Color}"
+                                            RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView,ElementName=txtTitle,Property=Height,Constant=230,Factor=1}"
+                                            RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToView,ElementName=txtTitle,Property=Width,Factor=0.1,Constant=-40}"
+                                           />
+                                        <Label Text="{Binding Type}" FontSize="12" TextColor="White" BackgroundColor="#00e676"
+                                            RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView,ElementName=imageBanner,Property=Height,Constant=-248,Factor=1}"
+                                            RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToView,ElementName=imageBanner,Property=Width,Factor=0.1,Constant=-30}"
+                                           />
+                                    </RelativeLayout>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                        NumberOfTapsRequired="1"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type local:HomePageViewModel}}, Path=ItemTapped}"
+                                        CommandParameter="{Binding .}"
+                                        >
+                                        </TapGestureRecognizer>
+                                    </Frame.GestureRecognizers>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </ScrollView>
+                
+           
+        </RefreshView>
+    </ContentPage.Content>
+</ContentPage>

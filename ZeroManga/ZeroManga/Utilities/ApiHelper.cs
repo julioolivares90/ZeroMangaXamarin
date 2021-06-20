@@ -33,7 +33,7 @@ namespace ZeroManga.Utilities
 
         public async Task<T> Get<T>(string url)
         {
-            using (var response = await _httpClient.GetAsync(url))
+            using (var response = await _httpClient.GetAsync(url.Trim()))
             {
                 var result = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(result);

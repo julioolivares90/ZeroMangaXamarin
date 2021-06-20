@@ -6,20 +6,15 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using ZeroManga.Services;
-using ZeroManga.ViewModels;
 
 namespace ZeroManga.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class InfoMangaPage : ContentPage
+    public partial class MangaVisorPage : ContentPage
     {
-        private InfoMangaPageViewModel viewModel; 
-        public InfoMangaPage()
+        public MangaVisorPage()
         {
             InitializeComponent();
-
-            //BindingContext = viewModel = new InfoMangaPageViewModel();
         }
     }
 }

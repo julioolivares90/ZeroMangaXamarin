@@ -15,6 +15,7 @@ namespace ZeroManga
             Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
             Routing.RegisterRoute(nameof(DetailManga), typeof(DetailManga));
             Routing.RegisterRoute(nameof(InfoMangaPage), typeof(InfoMangaPage));
+            Routing.RegisterRoute(nameof(MangaVisorPage), typeof(MangaVisorPage)) ;
         }
 
     }

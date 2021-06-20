@@ -12,6 +12,7 @@
              >
     <ContentPage.Content>
         <RefreshView x:DataType="local:HomePageViewModel" 
+                     RefreshColor="BurlyWood"
                      Command="{Binding LoadMangas}" 
                      IsRefreshing="{Binding IsBusy , Mode=TwoWay}" >
             <ScrollView>

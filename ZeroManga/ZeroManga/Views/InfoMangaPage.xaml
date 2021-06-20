@@ -3,15 +3,65 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:xamanimation="clr-namespace:Xamanimation;assembly=Xamanimation"
              x:Class="ZeroManga.Views.InfoMangaPage"
-             Shell.TabBarIsVisible="False"
-             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="True"
+             Shell.NavBarIsVisible="True"
              Shell.BackgroundColor="{StaticResource Primary}"
+             Title="{Binding TitleM }"
+             xmlns:this="clr-namespace:ZeroManga.ViewModels"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              >
+    <ContentPage.BindingContext>
+        <this:InfoMangaPageViewModel/>
+    </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ScrollView>
+            <RefreshView IsRefreshing="{Binding IsBusy}">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ffimageloading:CachedImage
+                    Grid.Row="0"
+                     Aspect="AspectFit"
+                    HeightRequest="300"
+                    WidthRequest="200"
+                    Source="{Binding Image}"
+                    ></ffimageloading:CachedImage>
+                    <Frame BorderColor="Black" Grid.Row="1" >
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition  Width="*"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Tipo" Grid.Row="0" Grid.Column="0"/>
+                            <Label Text="{Binding Tipo}" Grid.Row="0" Grid.Column="1"/>
+                            <Label Text="Score" Grid.Row="1" Grid.Column="0"/>
+                            <Label Text="{Binding Score}" Grid.Row="1" Grid.Column="1"/>
+                            <Label Text="Demografia" Grid.Row="2" Grid.Column="0"/>
+                            <Label Text="{Binding Demografia}" Grid.Row="2" Grid.Column="1"/>
+                            <Label Text="Estado" Grid.Row="3" Grid.Column="0"/>
+                            <Label Text="{Binding Estado}" Grid.Row="3" Grid.Column="1"/>
+                        </Grid>
+                    </Frame>
+                    <Frame BorderColor="black" Grid.Row="2">
+                        <StackLayout>
+                            <Label Text="{Binding Descripcion}" 
+                                   VerticalOptions="FillAndExpand" 
+                                   HorizontalOptions="FillAndExpand"
+                                   FontSize="Body"/>
+                        </StackLayout>
+                    </Frame>
+                </Grid>
+            </RefreshView>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

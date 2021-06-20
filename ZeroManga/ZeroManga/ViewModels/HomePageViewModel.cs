@@ -136,7 +136,8 @@ namespace ZeroManga.ViewModels
             Debug.WriteLine(item.Title);
             try
             {
-                await Shell.Current.GoToAsync($"{nameof(DetailManga)}?{nameof(DetailMangaPageViewModel.UrlManga)}=${item.MangaUrl}");
+                var navegateTo = $"{nameof(DetailManga)}?{nameof(DetailMangaPageViewModel.UrlManga)}={item.MangaUrl}";
+                await Shell.Current.GoToAsync(navegateTo);
             }
             catch (Exception ex)
             {

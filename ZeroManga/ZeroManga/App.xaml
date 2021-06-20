@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:converters="clr-namespace:ZeroManga.Converters"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:converters="clr-namespace:ZeroManga.Converters"
+            
              x:Class="ZeroManga.App">
     <!--
         Define global resources and styles here, that apply to all pages in your app.
@@ -33,6 +35,7 @@
         <ResourceDictionary>
             <converters:ScrollValueConverter x:Key="ScrollValueConverter"/>
             <converters:ComparisonConverter x:Key="ComparisonConverter"/>
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

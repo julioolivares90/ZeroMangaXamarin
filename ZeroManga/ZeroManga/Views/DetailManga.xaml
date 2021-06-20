@@ -3,9 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ZeroManga.Views.DetailManga"
              Shell.NavBarIsVisible="False"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:local="clr-namespace:ZeroManga.Styles"
+             xmlns:viewmodels="clr-namespace:ZeroManga.ViewModels"
               xmlns:anim="clr-namespace:Xamanimation;assembly=Xamanimation"
              BackgroundColor="{DynamicResource Primary}"
+              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+                 xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:model="clr-namespace:ZeroManga.Models"
             >
     <ContentPage.Resources>
         <!-- ANIMATIONS -->
@@ -24,29 +31,162 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <BoxView 
-                BackgroundColor="Red" HorizontalOptions="Fill"
+                BackgroundColor="White" HorizontalOptions="Fill"
                 TranslationY="{Binding RelativeScrollY, 
                                 Source={x:Reference Scroll}, 
                                 Converter={StaticResource ScrollValueConverter}, 
                                 ConverterParameter='-5;0;200;false;0'}"
                 />
-                <ScrollView>
+                <ffimageloading:CachedImage 
+                    Grid.Row="0"
+                    x:Name="Image"
+                     Margin="0,-42,0,0"
+                    Aspect="Fill"
+                     HeightRequest="{Binding CurrentImage, Mode=TwoWay}"
+                            HorizontalOptions="FillAndExpand" 
+                    Source="{Binding imageUrl}"
+                     TranslationY="{Binding RelativeScrollY, 
+                                Source={x:Reference Scroll}, 
+                                Converter={StaticResource ScrollValueConverter}, 
+                                ConverterParameter='-5;0;200;false;0'}"
+                            >
+                    <ffimageloading:CachedImage.Behaviors>
+                        <anim:AnimateProgressDouble
+                            TargetProperty="VisualElement.Opacity"
+                        Progress="{Binding ScrollY, Source={x:Reference Scroll}}"
+                        Minimum="0"
+                        Maximum="180"
+                        From="1"
+                        To="0"
+                            />
+                    </ffimageloading:CachedImage.Behaviors>
+                </ffimageloading:CachedImage>
+                <ScrollView Grid.Row="0" Margin="10,300,10,10">
                     <ScrollView.Behaviors>
                         <anim:ScrollViewScrollBehavior x:Name="Scroll" />
                     </ScrollView.Behaviors>
-                    <StackLayout>
-                        <Label Text="algo"/>
-                        <Label Text="algo"/>
-                        <Label Text="algo"/>
-                        <Label Text="algo"/>
-                        <Label Text="algo"/>
-                        <Label Text="algo"/>
-                        <Label Text="algo"/>
+                    <StackLayout Margin="15,0,15,15">
+                        <!--<StackLayout.Behaviors>
+                            <anim:AnimateProgressDouble
+                                TargetProperty="VisualElement.Opacity"
+                                Progress="{Binding ScrollY,Source={x:Reference Scroll}}"
+                                Minimum="0"
+                                Maximum="180"
+                                From="1"
+                                To="0"/>
+                        </StackLayout.Behaviors>
+                        -->
+                        <Frame
+                             Visual="Material"
+                            d:IsVisible="False"
+                            
+                            >
+                            <Frame.Behaviors>
+                                
+                                <anim:AnimateProgressDouble 
+                                    TargetProperty="VisualElement.Scale"
+                                    Progress="{Binding ScrollY, Source={x:Reference Scroll}}"
+                                    From="1"
+                                    To="0.75"
+                                    Minimum="320"
+                                    Maximum="400"/>
+                                <anim:AnimateProgressDouble 
+                                    TargetProperty="VisualElement.Opacity"
+                                    Progress="{Binding ScrollY, Source={x:Reference Scroll}}"
+                                    From="1"
+                                    To="0.9"
+                                    Minimum="0"
+                                    Maximum="320"/>
+                                <anim:AnimateProgressDouble 
+                                    TargetProperty="VisualElement.Opacity"
+                                    Progress="{Binding ScrollY, Source={x:Reference Scroll}}"
+                                    From="0.9"
+                                    To="0"
+                                    Minimum="320"
+                                    Maximum="400"/>
+                            </Frame.Behaviors>
+                            <StackLayout
+                                 Spacing="15" 
+                                xct:StateLayout.CurrentState="{Binding MainState}"
+                                xct:StateLayout.AnimateStateChanges="True">
+                                <xct:StateLayout.StateViews>
+                                    <xct:StateView StateKey="Loading">
+                                        <StackLayout 
+                                            Spacing="15" x:Name="Loader">
+                                            <StackLayout.Resources>
+                                                <anim:StoryBoard x:Key="LoadingBoard" Target="{x:Reference Loader}">
+                                                    <anim:FadeToAnimation Opacity="0.5" Duration="500"/>
+                                                    <anim:FadeToAnimation Opacity="1" Duration="500"/>
+                                                    <anim:FadeToAnimation Opacity="0.5" Duration="500"/>
+                                                    <anim:FadeToAnimation Opacity="1" Duration="500"/>
+                                                    <anim:FadeToAnimation Opacity="0.5" Duration="500"/>
+                                                    <anim:FadeToAnimation Opacity="1" Duration="500"/>
+                                                </anim:StoryBoard>
+                                            </StackLayout.Resources>
+                                            <StackLayout.Behaviors>
+                                                <anim:EntranceTransition
+	                                                Duration="1500"/>
+                                            </StackLayout.Behaviors>
+                                            <StackLayout.Triggers>
+                                                <DataTrigger
+                                                    TargetType="StackLayout"
+                                                     Binding="{Binding IsBusy}"
+                                                     Value="true">
+                                                    <DataTrigger.EnterActions>
+                                                        <anim:BeginAnimation
+                                                        Animation="{StaticResource LoadingBoard}" />
+                                                    </DataTrigger.EnterActions>
+                                                </DataTrigger>
+                                            </StackLayout.Triggers>
+¡                                        </StackLayout>
+                                    </xct:StateView>
+                                </xct:StateLayout.StateViews>
+                                <StackLayout Orientation="Horizontal" >
+                                    <Button Text="Mas Detalles" Command="{Binding MoreInfoTapped}" />
+                                    <Button Text="Favorito"  Command="{Binding FavoritosCommand}" />
+                                </StackLayout>
+                                <CollectionView
+                                    ItemsSource="{Binding Capitulos}">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Vertical"/>
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Frame CornerRadius="10"
+                                                   Margin="10"
+                                                   Padding="10"
+                                                   Visual="Material"
+                                                   HasShadow="True"
+                                                   BorderColor="Black"
+                                                   x:DataType="model:Capitulo"
+                                                   >
+                                                <StackLayout VerticalOptions="CenterAndExpand">
+                                                    <Label Text="{Binding Name}" FontSize="Large" HorizontalOptions="CenterAndExpand"/>
+                                                </StackLayout>
+                                                <Frame.GestureRecognizers>
+                                                    <TapGestureRecognizer
+                                                        NumberOfTapsRequired="1"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DetailMangaPageViewModel}}, Path=ItemTapped}"
+                                                        CommandParameter="{Binding .}"
+                                                        >
+                                                        
+                                                    </TapGestureRecognizer>
+                                                </Frame.GestureRecognizers>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                                <Label Text="{Binding TitleM}" HorizontalOptions="CenterAndExpand"/>
+                                <Label Text="{Binding Descripcion}" HorizontalOptions="CenterAndExpand"/>
+                            </StackLayout>
+                        </Frame>
+                      
                     </StackLayout>
                 </ScrollView>
             </Grid>
             
             <FlexLayout
+                
                 x:Name="FakeNavBar"
                 BackgroundColor="{StaticResource Primary}"
                 Direction="Row"
@@ -70,22 +210,29 @@
                         </DataTrigger.ExitActions>
                     </DataTrigger>
                 </FlexLayout.Triggers>
-                <ImageButton
-                FlexLayout.Shrink="0" Command="{Binding BackCommand}">
+               
+               <ImageButton
+                   
+                   BackgroundColor="{StaticResource Primary}"
+                    WidthRequest="30"
+                    HeightRequest="30"
+                FlexLayout.Shrink="1" Command="{Binding BackCommand}">
                     <ImageButton.Source>
                         <FontImageSource
-                        FontFamily="FontAwesome"
+                            
+                        FontFamily="typicons"
                         Glyph="{x:Static local:IconFont.ChevronLeft}"
-                        Color="{StaticResource NeutralDark}" />
+                        Color="White" />
                     </ImageButton.Source>
                 </ImageButton>
                 <Label
-                Text="{Binding title}" 
-                FontSize="18"
+                Text="{Binding TitleM}" 
+                FontSize="20"
                 Margin="10,0"
-                VerticalOptions="Center"
-                TextColor="{StaticResource NeutralDark}"
-                LineBreakMode="TailTruncation"
+                
+                HorizontalOptions="CenterAndExpand"
+                TextColor="White"
+                LineBreakMode="HeadTruncation"
                 FlexLayout.AlignSelf="Center"
                 FlexLayout.Grow="1" />
             </FlexLayout>
